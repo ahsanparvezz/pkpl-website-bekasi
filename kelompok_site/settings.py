@@ -136,7 +136,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='126173533276-uik85ec8korovq03ksgp4joccgimlfmv.app
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
 
 # Email anggota kelompok yang diizinkan mengubah tampilan
-ALLOWED_MEMBER_EMAILS='ahsan.p1012@gmail.com', 'marlondbatara9899@gmail.com', 'muhammadrazka8@gmail.com', 'geralduswahyudi@gmail.com'
+ALLOWED_MEMBER_EMAILS='ahsan.p1012@gmail.com', 'kunkingfish@gmail.com', 'marlondbatara9899@gmail.com', 'muhammadrazka8@gmail.com', 'geralduswahyudi@gmail.com'
 
 # Tambahkan ini di bagian paling bawah settings.py
 
