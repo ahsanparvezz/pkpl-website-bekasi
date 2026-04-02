@@ -18,9 +18,6 @@ def is_member(user):
 
 
 def home(request):
-    if request.user.is_authenticated:
-        print(f"User Login: {request.user.email}") # Ini akan muncul di terminal hitam (cmd)
-        print(f"Allowed List: {settings.ALLOWED_MEMBER_EMAILS}")
     anggota = AnggotaKelompok.objects.all()
     theme = GlobalTheme.get_instance()
     context = {
