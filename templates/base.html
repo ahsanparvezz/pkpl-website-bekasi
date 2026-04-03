@@ -12,7 +12,6 @@
 
   <style>
     :root {
-      /* ── TYPO SUDAH DIPERBAIKI DI SINI ── */
       --primary: {{ global_theme.primary_color|default:'#facc15' }};
       --secondary: {{ global_theme.secondary_color|default:'#06b6d4' }};
       --accent: {{ global_theme.accent_color|default:'#ec4899' }};
@@ -39,7 +38,6 @@
 
     h1, h2, h3, .nav-logo, .giant-title { font-family: var(--font-display); }
 
-    /* ── GLOBAL ANIMATIONS ── */
     @keyframes slideUpFade {
       0% { opacity: 0; transform: translateY(40px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -49,7 +47,7 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── DYNAMIC GLASSMORPHISM NAVBAR ── */
+    /* ── NAVBAR ── */
     .nav-wrapper {
       position: fixed; top: 1.5rem; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: center; pointer-events: none;
@@ -75,6 +73,14 @@
     
     .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
 
+    /* Identitas Akun Login (Teks Saja) */
+    .nav-user-text {
+      font-size: 0.8rem; font-weight: 800; color: var(--primary);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding-right: 1.25rem; border-right: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+      margin-right: 0.5rem;
+    }
+
     .nav-btn {
       display: inline-flex; align-items: center; justify-content: center;
       height: 38px; padding: 0 1.25rem; border-radius: 100px;
@@ -91,7 +97,7 @@
 
     main { max-width: 1200px; margin: 0 auto; padding: 120px 2rem 5rem; position: relative; z-index: 1; }
 
-    /* ── DYNAMIC GLASSMORPHISM THEME PANEL ── */
+    /* ── THEME PANEL ── */
     #theme-panel {
       background: color-mix(in srgb, var(--bg) 80%, transparent);
       backdrop-filter: blur(40px) saturate(200%);
@@ -139,7 +145,10 @@
     <a href="{% url 'home' %}" class="nav-logo">BEKASI.</a>
     <div class="nav-actions">
       {% if user.is_authenticated %}
-        
+        <div class="nav-user-text" title="Login sebagai: {{ user.email|default:user.username }}">
+          {{ user.first_name|default:user.username }}
+        </div>
+
         {% if user.is_staff or user.is_superuser %}
           <a href="/admin/" class="nav-btn nav-btn-ghost">Admin Panel</a>
           <div class="nav-divider"></div>
@@ -231,7 +240,6 @@
   let currentLayout = '{{ global_theme.card_layout|default:"grid" }}';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // ── PENGAMAN: Cek apakah user sedang login dan panel ada ──
     const cpPrimary = document.getElementById('cp-primary');
     if (cpPrimary) {
       const rawData = {
@@ -258,7 +266,7 @@
 
   function previewTheme() {
     const cpPrimary = document.getElementById('cp-primary');
-    if (!cpPrimary) return; // Pengaman saat diluar mode edit
+    if (!cpPrimary) return; 
 
     const r = document.documentElement;
     r.style.setProperty('--primary', cpPrimary.value);
@@ -271,7 +279,7 @@
 
   function previewFont() {
     const cpFont = document.getElementById('cp-font');
-    if (!cpFont) return; // Pengaman
+    if (!cpFont) return; 
     
     document.getElementById('google-font-link').href = `https://fonts.googleapis.com/css2?family=${cpFont.value.replace(/_/g, '+')}:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap`;
     document.documentElement.style.setProperty('--font-display', `'${cpFont.value.replace(/_/g,' ')}', sans-serif`);
@@ -285,7 +293,7 @@
 
   function applyPreset(p, s, a, bg, text, card) {
     const cpPrimary = document.getElementById('cp-primary');
-    if (!cpPrimary) return; // Pengaman
+    if (!cpPrimary) return;
 
     cpPrimary.value = p; document.getElementById('cp-secondary').value = s;
     document.getElementById('cp-accent').value = a; document.getElementById('cp-bg').value = bg;
