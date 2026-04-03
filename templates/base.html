@@ -4,506 +4,322 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Kelompok Kami{% endblock %}</title>
+  <title>{% block title %}BEKASI.{% endblock %}</title>
   
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link id="google-font-link" href="https://fonts.googleapis.com/css2?family={{ global_theme.font_family|default:'Space Grotesk'|urlencode }}&display=swap" rel="stylesheet">
+  <link id="google-font-link" href="https://fonts.googleapis.com/css2?family={{ global_theme.font_family|default:'Space_Grotesk'|urlencode }}:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --primary: {{ global_theme.primary_color|default:'#6366f1' }};
-      --secondary: {{ global_theme.secondary_color|default:'#8b5cf6' }};
-      --accent: {{ global_theme.accent_color|default:'#06b6d4' }};
-      --bg: {{ global_theme.bg_color|default:'#0f0f1a' }};
-      --text: {{ global_theme.text_color|default:'#e2e8f0' }};
-      --card-bg: {{ global_theme.card_bg|default:'#1e1e35' }};
-      --font: '{{ global_theme.font_family|default:'Space Grotesk' }}', sans-serif;
+      /* ── TYPO SUDAH DIPERBAIKI DI SINI ── */
+      --primary: {{ global_theme.primary_color|default:'#facc15' }};
+      --secondary: {{ global_theme.secondary_color|default:'#06b6d4' }};
+      --accent: {{ global_theme.accent_color|default:'#ec4899' }};
+      --bg: {{ global_theme.bg_color|default:'#050505' }};
+      --text: {{ global_theme.text_color|default:'#ffffff' }};
+      --card-bg: {{ global_theme.card_bg|default:'#111111' }}; 
       
-      --primary-rgb: 99, 102, 241;
-      --accent-rgb: 6, 182, 212;
-      --glow: 0 0 40px rgba(var(--primary-rgb), 0.3);
-      --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(var(--primary-rgb), 0.4);
-      --radius: 20px;
-      --radius-sm: 12px;
-      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: '{{ global_theme.font_family|default:'Space Grotesk' }}', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --transition: all 0.5s cubic-bezier(0.25, 1, 0.25, 1);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font);
-      background: var(--bg);
+      font-family: var(--font-body);
+      background-color: var(--bg);
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
+      line-height: 1.6;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
     }
 
-    /* ── Noise Texture Overlay ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
+    h1, h2, h3, .nav-logo, .giant-title { font-family: var(--font-display); }
+
+    /* ── GLOBAL ANIMATIONS ── */
+    @keyframes slideUpFade {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes navReveal {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Ambient Background Orbs ── */
-    .bg-orbs {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
+    /* ── DYNAMIC GLASSMORPHISM NAVBAR ── */
+    .nav-wrapper {
+      position: fixed; top: 1.5rem; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: center; pointer-events: none;
+      animation: navReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.12;
-      animation: drift 20s ease-in-out infinite;
-    }
-    .orb-1 { width: 600px; height: 600px; background: var(--primary); top: -200px; left: -200px; animation-delay: 0s; }
-    .orb-2 { width: 500px; height: 500px; background: var(--secondary); bottom: -150px; right: -150px; animation-delay: -7s; }
-    .orb-3 { width: 400px; height: 400px; background: var(--accent); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -14s; }
-
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -30px) scale(1.05); }
-      66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-
-    /* ── Navbar ── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(15, 15, 26, 0.8);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
+      pointer-events: auto;
+      background: color-mix(in srgb, var(--card-bg) 40%, transparent);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+      border-radius: 100px;
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      display: flex; align-items: center; gap: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2), inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
+      transition: var(--transition);
     }
-    .nav-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      font-size: 1.3rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-    .nav-actions { display: flex; align-items: center; gap: 1rem; }
     
-    .nav-user {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.4rem 1rem 0.4rem 0.4rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 0.85rem;
+    .nav-logo {
+      font-size: 1.25rem; font-weight: 900; color: var(--text);
+      text-decoration: none; letter-spacing: 0.05em;
     }
-    .nav-user img {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .nav-user .user-name { color: var(--text); font-weight: 500; }
-    .member-badge {
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 100px;
-      color: white;
-      font-weight: 600;
-    }
+    
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1.25rem;
-      border-radius: 100px;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: var(--transition);
-      text-decoration: none;
+    .nav-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 38px; padding: 0 1.25rem; border-radius: 100px;
+      font-weight: 600; font-size: 0.85rem; letter-spacing: 0.02em;
+      cursor: pointer; transition: var(--transition); text-decoration: none;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(var(--primary-rgb), 0.5); }
-    .btn-ghost {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+    .nav-btn-ghost { background: transparent; color: var(--text); border: 1px solid transparent; }
+    .nav-btn-ghost:hover { background: color-mix(in srgb, var(--text) 8%, transparent); border-color: color-mix(in srgb, var(--text) 15%, transparent); }
+    
+    .nav-btn-solid { background: var(--text); color: var(--bg); border: none; font-weight: 700; }
+    .nav-btn-solid:hover { transform: translateY(-2px); box-shadow: 0 5px 15px color-mix(in srgb, var(--text) 20%, transparent); }
+    
+    .nav-divider { width: 1px; height: 20px; background: color-mix(in srgb, var(--text) 15%, transparent); margin: 0 0.25rem; }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 120px 2rem 5rem; position: relative; z-index: 1; }
+
+    /* ── DYNAMIC GLASSMORPHISM THEME PANEL ── */
+    #theme-panel {
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
       color: var(--text);
+      border-left: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+      box-shadow: -20px 0 50px rgba(0,0,0,0.5);
     }
-    .btn-ghost:hover { border-color: var(--border-hover); background: rgba(var(--primary-rgb), 0.1); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent); padding-bottom: 1.5rem; }
+    .panel-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--text); }
+    
+    .setting-group { margin-bottom: 2rem; }
+    .setting-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 1rem; display: block; color: var(--text); }
+    
+    .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .color-wrap { background: color-mix(in srgb, var(--text) 5%, transparent); border: 1px solid color-mix(in srgb, var(--text) 10%, transparent); border-radius: 10px; padding: 0.5rem 0.75rem; display: flex; align-items: center; justify-content: space-between; }
+    .color-wrap label { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .color-wrap input[type=color] { width: 28px; height: 28px; border: none; border-radius: 6px; cursor: pointer; padding: 0; background: none; }
+    .color-wrap input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+    .color-wrap input[type=color]::-webkit-color-swatch { border: 1px solid color-mix(in srgb, var(--text) 20%, transparent); border-radius: 6px; }
 
-    /* ── Main Content ── */
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 2rem 4rem;
+    .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .preset-btn { padding: 0.75rem; background: color-mix(in srgb, var(--text) 3%, transparent); border: 1px solid color-mix(in srgb, var(--text) 10%, transparent); border-radius: 10px; font-weight: 600; font-size: 0.8rem; color: var(--text); cursor: pointer; transition: var(--transition); text-align: left; position: relative; overflow: hidden; }
+    .preset-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--theme-color, var(--text)); }
+    .preset-btn:hover { background: color-mix(in srgb, var(--text) 8%, transparent); padding-left: 1.2rem; }
+
+    .btn-reset {
+      flex: 1; height: 45px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+      background: color-mix(in srgb, var(--text) 5%, transparent); 
+      border: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+      color: var(--text); cursor: pointer; transition: var(--transition);
     }
+    .btn-reset:hover { background: color-mix(in srgb, var(--text) 10%, transparent); border-color: color-mix(in srgb, var(--text) 30%, transparent); }
 
-    /* ── Toast Notification ── */
-    #toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
-      padding: 1rem 1.5rem;
-      border-radius: var(--radius-sm);
-      font-weight: 500;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: var(--transition);
-      backdrop-filter: blur(20px);
-      max-width: 350px;
-    }
-    #toast.show { transform: translateY(0); opacity: 1; }
-    #toast.success { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; }
-    #toast.error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
-    #toast.info { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+    #toast { position: fixed; bottom: 2rem; left: 50%; transform: translate(-50%, 50px); opacity: 0; z-index: 9999; padding: 1rem 2rem; background: var(--text); color: var(--bg); border-radius: 100px; font-weight: 700; transition: var(--transition); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    #toast.show { transform: translate(-50%, 0); opacity: 1; }
 
     {% block extra_style %}{% endblock %}
   </style>
 </head>
 <body>
 
-<div class="bg-orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
-
-<nav>
-  <div class="nav-inner">
-    <a href="{% url 'home' %}" class="nav-logo">bekasi</a>
+<div class="nav-wrapper">
+  <nav>
+    <a href="{% url 'home' %}" class="nav-logo">BEKASI.</a>
     <div class="nav-actions">
       {% if user.is_authenticated %}
-        <div class="nav-user">
-          {% if user.socialauth_set.all %}
-            <img src="{{ user.social_auth.get.extra_data.picture }}" alt="" onerror="this.src='https://ui-avatars.com/api/?name={{ user.get_full_name|urlencode }}&background=6366f1&color=fff'">
-          {% else %}
-            <img src="https://ui-avatars.com/api/?name={{ user.get_full_name|urlencode }}&background=6366f1&color=fff" alt="">
-          {% endif %}
-          <span class="user-name">{{ user.first_name|default:user.username }}</span>
-          {% if is_member %}
-            <span class="member-badge">✦ Member</span>
-          {% endif %}
-        </div>
+        
+        {% if user.is_staff or user.is_superuser %}
+          <a href="/admin/" class="nav-btn nav-btn-ghost">Admin Panel</a>
+          <div class="nav-divider"></div>
+        {% endif %}
+
         {% if is_member %}
-          <button class="btn btn-ghost" onclick="toggleThemePanel()" title="Ubah Tampilan">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-            Tema
+          <button class="nav-btn nav-btn-ghost" onclick="toggleThemePanel()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:0.4rem;"><path d="M12 20.45l-8.5-4.25v-8.5l8.5-4.25 8.5 4.25v8.5z"/></svg>
+            Edit Tema
           </button>
         {% endif %}
-        <a href="{% url 'logout' %}" class="btn btn-ghost">Logout</a>
-      {% else %}
-        <a href="{% url 'login' %}" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
-          Login
+        
+        <a href="{% url 'logout' %}" class="nav-btn nav-btn-ghost" style="padding:0 0.8rem;" title="Keluar">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
         </a>
+      {% else %}
+        <a href="/admin/" class="nav-btn nav-btn-ghost" style="margin-right: 0.5rem;">Admin Panel</a>
+        <a href="{% url 'login' %}" class="nav-btn nav-btn-solid">Masuk</a>
       {% endif %}
     </div>
-  </div>
-</nav>
-
-{% if messages %}
-  <div style="position:fixed;top:80px;right:2rem;z-index:999;display:flex;flex-direction:column;gap:0.5rem;">
-    {% for message in messages %}
-      <div style="padding:0.75rem 1.25rem;border-radius:12px;backdrop-filter:blur(20px);
-        {% if message.tags == 'success' %}background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;
-        {% elif message.tags == 'error' %}background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;
-        {% else %}background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;{% endif %}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
+  </nav>
+</div>
 
 <main>
   {% block content %}{% endblock %}
 </main>
 
-<!-- Theme Panel -->
 {% if is_member %}
-<div id="theme-panel" style="
-  position:fixed; top:0; right:-420px; width:400px; height:100vh;
-  background:rgba(15,15,26,0.95); border-left:1px solid var(--border);
-  backdrop-filter:blur(30px); z-index:200; transition:right 0.4s cubic-bezier(0.4,0,0.2,1);
-  overflow-y:auto; padding:2rem;
-">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
-    <h3 style="font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-      ✦ Pengaturan Tema
-    </h3>
-    <button onclick="toggleThemePanel()" style="background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:0.4rem 0.75rem;cursor:pointer;font-family:var(--font);">✕</button>
+<div id="theme-panel" style="position:fixed; top:0; right:-450px; width:400px; height:100vh; z-index:200; transition:right 0.4s cubic-bezier(0.25, 1, 0.25, 1); overflow-y:auto; padding:2rem;">
+  <div class="panel-header">
+    <h3 class="panel-title">Pengaturan Tema</h3>
+    <button onclick="toggleThemePanel()" style="background:none; border:none; color:var(--text); font-size:2rem; cursor:pointer; line-height:1;">&times;</button>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:1.5rem;">
-    
-    <!-- Colors -->
-    <div>
-      <label style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;display:block;">Warna</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-<div class="color-input-wrap">
-  <label>Primer</label>
-  <input type="color" id="cp-primary" value="{{ global_theme.primary_color }}" onchange="previewTheme()">
-</div>
-<div class="color-input-wrap">
-  <label>Sekunder</label>
-  <input type="color" id="cp-secondary" value="{{ global_theme.secondary_color }}" onchange="previewTheme()">
-</div>
-        <div class="color-input-wrap">
-          <label>Aksen</label>
-          <input type="color" id="cp-accent" value="{{ global_theme.accent_color }}" onchange="previewTheme()">
-        </div>
-        <div class="color-input-wrap">
-          <label>Background</label>
-          <input type="color" id="cp-bg" value="{{ global_theme.bg_color }}" onchange="previewTheme()">
-        </div>
-        <div class="color-input-wrap">
-          <label>Teks</label>
-          <input type="color" id="cp-text" value="{{ global_theme.text_color }}" onchange="previewTheme()">
-        </div>
-        <div class="color-input-wrap">
-          <label>Kartu</label>
-          <input type="color" id="cp-card" value="{{ global_theme.card_bg }}" onchange="previewTheme()">
-        </div>
-      </div>
+  <div class="setting-group">
+    <span class="setting-label">Preset Kece</span>
+    <div class="preset-grid">
+      <button class="preset-btn" style="--theme-color: #facc15;" onclick="applyPreset('#facc15','#06b6d4','#ec4899','#050505','#ffffff','#111111')">Cyber Neon</button>
+      <button class="preset-btn" style="--theme-color: #3b82f6;" onclick="applyPreset('#3b82f6','#60a5fa','#93c5fd','#f8fafc','#0f172a','#ffffff')">Nordic Frost</button>
+      <button class="preset-btn" style="--theme-color: #8b5cf6;" onclick="applyPreset('#8b5cf6','#d946ef','#14b8a6','#0a0514','#f3e8ff','#150b24')">Midnight Violet</button>
+      <button class="preset-btn" style="--theme-color: #10b981;" onclick="applyPreset('#10b981','#34d399','#fcd34d','#022c22','#f0fdf4','#064e3b')">Matcha Zen</button>
+      <button class="preset-btn" style="--theme-color: #e11d48;" onclick="applyPreset('#e11d48','#f43f5e','#fb923c','#110505','#fff1f2','#220a0a')">Crimson Dark</button>
+      <button class="preset-btn" style="--theme-color: #000000;" onclick="applyPreset('#000000','#333333','#666666','#ffffff','#000000','#f5f5f5')">Pure Mono</button>
     </div>
+  </div>
 
-    <!-- Presets -->
-    <div>
-      <label style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;display:block;">Preset Warna</label>
-      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
-        <button class="preset-btn" onclick="applyPreset('#6366f1','#8b5cf6','#06b6d4','#0f0f1a','#e2e8f0','#1e1e35')" style="background:linear-gradient(135deg,#6366f1,#06b6d4);">Indigo</button>
-        <button class="preset-btn" onclick="applyPreset('#ec4899','#f43f5e','#fb923c','#0f0a1a','#fce7f3','#1a0f1a')" style="background:linear-gradient(135deg,#ec4899,#fb923c);">Rose</button>
-        <button class="preset-btn" onclick="applyPreset('#10b981','#059669','#34d399','#0a1a12','#d1fae5','#0f2218')" style="background:linear-gradient(135deg,#10b981,#34d399);">Emerald</button>
-        <button class="preset-btn" onclick="applyPreset('#f59e0b','#d97706','#fbbf24','#1a1000','#fef3c7','#2a1a00')" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);">Amber</button>
-        <button class="preset-btn" onclick="applyPreset('#e2e8f0','#94a3b8','#64748b','#f8fafc','#0f172a','#e2e8f0')" style="background:linear-gradient(135deg,#e2e8f0,#64748b);">Light</button>
-        <button class="preset-btn" onclick="applyPreset('#a855f7','#7c3aed','#c084fc','#0a0a14','#f3e8ff','#150a28')" style="background:linear-gradient(135deg,#a855f7,#c084fc);">Violet</button>
-      </div>
+  <div class="setting-group">
+    <span class="setting-label">Warna Manual</span>
+    <div class="color-grid">
+      <div class="color-wrap"><label>Primary</label><input type="color" id="cp-primary" value="#facc15" onchange="previewTheme()"></div>
+      <div class="color-wrap"><label>Secondary</label><input type="color" id="cp-secondary" value="#06b6d4" onchange="previewTheme()"></div>
+      <div class="color-wrap"><label>Accent</label><input type="color" id="cp-accent" value="#ec4899" onchange="previewTheme()"></div>
+      <div class="color-wrap"><label>Background</label><input type="color" id="cp-bg" value="#050505" onchange="previewTheme()"></div>
+      <div class="color-wrap"><label>Text</label><input type="color" id="cp-text" value="#ffffff" onchange="previewTheme()"></div>
+      <div class="color-wrap"><label>Card Base</label><input type="color" id="cp-card" value="#111111" onchange="previewTheme()"></div>
     </div>
+  </div>
 
-    <!-- Font -->
-    <div>
-      <label style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;display:block;">Font</label>
-      <select id="cp-font" onchange="previewFont()" style="width:100%;padding:0.6rem 1rem;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:0.875rem;cursor:pointer;">
-        <option value="Space_Grotesk" {% if global_theme.font_family == 'Space_Grotesk' %}selected{% endif %}>Space Grotesk</option>
-        <option value="Outfit" {% if global_theme.font_family == 'Outfit' %}selected{% endif %}>Outfit</option>
-        <option value="Sora" {% if global_theme.font_family == 'Sora' %}selected{% endif %}>Sora</option>
-        <option value="DM_Sans" {% if global_theme.font_family == 'DM_Sans' %}selected{% endif %}>DM Sans</option>
-        <option value="Nunito" {% if global_theme.font_family == 'Nunito' %}selected{% endif %}>Nunito</option>
-        <option value="Raleway" {% if global_theme.font_family == 'Raleway' %}selected{% endif %}>Raleway</option>
-        <option value="Josefin_Sans" {% if global_theme.font_family == 'Josefin_Sans' %}selected{% endif %}>Josefin Sans</option>
-        <option value="Quicksand" {% if global_theme.font_family == 'Quicksand' %}selected{% endif %}>Quicksand</option>
-      </select>
+  <div class="setting-group">
+    <span class="setting-label">Tipografi</span>
+    <select id="cp-font" onchange="previewFont()" style="width:100%; padding:0.8rem; border-radius:10px; background:color-mix(in srgb, var(--text) 5%, transparent); border:1px solid color-mix(in srgb, var(--text) 10%, transparent); color:var(--text); font-family:var(--font-body); font-weight:600; outline:none; cursor:pointer;">
+      <option value="Space_Grotesk" style="color:#000;" {% if global_theme.font_family == 'Space_Grotesk' %}selected{% endif %}>Space Grotesk (Modern)</option>
+      <option value="Syne" style="color:#000;" {% if global_theme.font_family == 'Syne' %}selected{% endif %}>Syne (Artistic)</option>
+      <option value="Outfit" style="color:#000;" {% if global_theme.font_family == 'Outfit' %}selected{% endif %}>Outfit (Clean)</option>
+      <option value="Inter" style="color:#000;" {% if global_theme.font_family == 'Inter' %}selected{% endif %}>Inter (Neutral)</option>
+    </select>
+  </div>
+
+  <div class="setting-group">
+    <span class="setting-label">Layout Kartu</span>
+    <div style="display:flex; gap:0.5rem;">
+      <button class="preset-btn" style="flex:1;text-align:center;--theme-color:transparent;" onclick="setLayout('grid')">Grid</button>
+      <button class="preset-btn" style="flex:1;text-align:center;--theme-color:transparent;" onclick="setLayout('list')">List</button>
     </div>
+  </div>
 
-    <!-- Layout -->
-    <div>
-      <label style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;display:block;">Layout Kartu</label>
-      <div style="display:flex;gap:0.5rem;">
-        <button class="layout-btn {% if global_theme.card_layout == 'grid' %}active{% endif %}" onclick="setLayout('grid')">⊞ Grid</button>
-        <button class="layout-btn {% if global_theme.card_layout == 'list' %}active{% endif %}" onclick="setLayout('list')">☰ List</button>
-      </div>
-    </div>
-
-    <!-- Save -->
-    <button onclick="saveTheme()" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.875rem;">
-      💾 Simpan Tema
-    </button>
-    <button onclick="resetTheme()" class="btn btn-ghost" style="width:100%;justify-content:center;">
-      ↺ Reset Default
-    </button>
+  <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+    <button onclick="resetTheme()" class="btn-reset">Reset</button>
+    <button onclick="saveTheme()" class="nav-btn-solid" style="flex: 2; height:45px; border-radius:10px; font-size:1rem; cursor:pointer;">Simpan</button>
   </div>
 </div>
-<div id="theme-overlay" onclick="toggleThemePanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:199;"></div>
+<div id="theme-overlay" onclick="toggleThemePanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);z-index:199;"></div>
 {% endif %}
 
 <div id="toast"></div>
-
-<style>
-  .color-input-wrap {
-    display:flex;flex-direction:column;gap:0.4rem;
-  }
-  .color-input-wrap label {
-    font-size:0.8rem;color:rgba(255,255,255,0.5);
-  }
-  .color-input-wrap input[type=color] {
-    width:100%;height:40px;border:1px solid var(--border);border-radius:8px;
-    background:var(--card-bg);cursor:pointer;padding:2px;
-  }
-  .preset-btn {
-    padding:0.4rem 0.9rem;border:none;border-radius:100px;color:white;
-    font-size:0.8rem;font-weight:600;cursor:pointer;font-family:var(--font);
-    transition:var(--transition);
-  }
-  .preset-btn:hover { transform:scale(1.05); }
-  .layout-btn {
-    flex:1;padding:0.5rem;background:var(--card-bg);border:1px solid var(--border);
-    border-radius:8px;color:var(--text);font-family:var(--font);font-size:0.85rem;
-    cursor:pointer;transition:var(--transition);
-  }
-  .layout-btn.active { border-color:var(--primary);color:var(--primary); }
-  .layout-btn:hover { border-color:var(--border-hover); }
-</style>
 
 <script>
   let themeOpen = false;
   let currentLayout = '{{ global_theme.card_layout|default:"grid" }}';
 
+  document.addEventListener('DOMContentLoaded', () => {
+    // ── PENGAMAN: Cek apakah user sedang login dan panel ada ──
+    const cpPrimary = document.getElementById('cp-primary');
+    if (cpPrimary) {
+      const rawData = {
+        primary: '{{ global_theme.primary_color }}', secondary: '{{ global_theme.secondary_color }}',
+        accent: '{{ global_theme.accent_color }}', bg: '{{ global_theme.bg_color }}',
+        text: '{{ global_theme.text_color }}', card: '{{ global_theme.card_bg }}'
+      };
+      if(rawData.primary && rawData.primary.startsWith('#')) document.getElementById('cp-primary').value = rawData.primary;
+      if(rawData.secondary && rawData.secondary.startsWith('#')) document.getElementById('cp-secondary').value = rawData.secondary;
+      if(rawData.accent && rawData.accent.startsWith('#')) document.getElementById('cp-accent').value = rawData.accent;
+      if(rawData.bg && rawData.bg.startsWith('#')) document.getElementById('cp-bg').value = rawData.bg;
+      if(rawData.text && rawData.text.startsWith('#')) document.getElementById('cp-text').value = rawData.text;
+      if(rawData.card && rawData.card.startsWith('#')) document.getElementById('cp-card').value = rawData.card;
+      previewTheme(); 
+    }
+    setLayout(currentLayout);
+  });
+
   function toggleThemePanel() {
     themeOpen = !themeOpen;
-    const panel = document.getElementById('theme-panel');
-    const overlay = document.getElementById('theme-overlay');
-    if (themeOpen) {
-      panel.style.right = '0';
-      overlay.style.display = 'block';
-    } else {
-      panel.style.right = '-420px';
-      overlay.style.display = 'none';
-    }
+    document.getElementById('theme-panel').style.right = themeOpen ? '0' : '-450px';
+    document.getElementById('theme-overlay').style.display = themeOpen ? 'block' : 'none';
   }
 
   function previewTheme() {
+    const cpPrimary = document.getElementById('cp-primary');
+    if (!cpPrimary) return; // Pengaman saat diluar mode edit
+
     const r = document.documentElement;
-    r.style.setProperty('--primary', document.getElementById('cp-primary').value);
+    r.style.setProperty('--primary', cpPrimary.value);
     r.style.setProperty('--secondary', document.getElementById('cp-secondary').value);
     r.style.setProperty('--accent', document.getElementById('cp-accent').value);
     r.style.setProperty('--bg', document.getElementById('cp-bg').value);
     r.style.setProperty('--text', document.getElementById('cp-text').value);
     r.style.setProperty('--card-bg', document.getElementById('cp-card').value);
-    document.body.style.background = document.getElementById('cp-bg').value;
-    document.body.style.color = document.getElementById('cp-text').value;
   }
 
   function previewFont() {
-    const fontVal = document.getElementById('cp-font').value;
-    const fontName = fontVal.replace(/_/g, '+');
-    const link = document.getElementById('google-font-link');
-    link.href = `https://fonts.googleapis.com/css2?family=${fontName}:wght@300;400;500;600;700&display=swap`;
-    document.documentElement.style.setProperty('--font', `'${fontVal.replace(/_/g,' ')}', sans-serif`);
+    const cpFont = document.getElementById('cp-font');
+    if (!cpFont) return; // Pengaman
+    
+    document.getElementById('google-font-link').href = `https://fonts.googleapis.com/css2?family=${cpFont.value.replace(/_/g, '+')}:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap`;
+    document.documentElement.style.setProperty('--font-display', `'${cpFont.value.replace(/_/g,' ')}', sans-serif`);
   }
 
   function setLayout(layout) {
     currentLayout = layout;
-    document.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    updateCardLayout(layout);
-  }
-
-  function updateCardLayout(layout) {
-    const grid = document.getElementById('anggota-grid');
-    if (!grid) return;
-    if (layout === 'list') {
-      grid.style.gridTemplateColumns = '1fr';
-    } else {
-      grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(300px, 1fr))';
-    }
+    const grid = document.getElementById('bekasi-grid');
+    if (grid) grid.className = layout === 'list' ? 'layout-list' : '';
   }
 
   function applyPreset(p, s, a, bg, text, card) {
-    document.getElementById('cp-primary').value = p;
-    document.getElementById('cp-secondary').value = s;
-    document.getElementById('cp-accent').value = a;
-    document.getElementById('cp-bg').value = bg;
-    document.getElementById('cp-text').value = text;
-    document.getElementById('cp-card').value = card;
+    const cpPrimary = document.getElementById('cp-primary');
+    if (!cpPrimary) return; // Pengaman
+
+    cpPrimary.value = p; document.getElementById('cp-secondary').value = s;
+    document.getElementById('cp-accent').value = a; document.getElementById('cp-bg').value = bg;
+    document.getElementById('cp-text').value = text; document.getElementById('cp-card').value = card;
     previewTheme();
+  }
+
+  function resetTheme() {
+    applyPreset('#facc15', '#06b6d4', '#ec4899', '#050505', '#ffffff', '#111111');
+    const cpFont = document.getElementById('cp-font');
+    if (cpFont) {
+      cpFont.value = 'Space_Grotesk';
+      previewFont();
+    }
+    setLayout('grid');
   }
 
   async function saveTheme() {
     const data = {
-      primary_color: document.getElementById('cp-primary').value,
-      secondary_color: document.getElementById('cp-secondary').value,
-      accent_color: document.getElementById('cp-accent').value,
-      bg_color: document.getElementById('cp-bg').value,
-      text_color: document.getElementById('cp-text').value,
-      card_bg: document.getElementById('cp-card').value,
-      font_family: document.getElementById('cp-font').value,
-      card_layout: currentLayout,
+      primary_color: document.getElementById('cp-primary').value, secondary_color: document.getElementById('cp-secondary').value,
+      accent_color: document.getElementById('cp-accent').value, bg_color: document.getElementById('cp-bg').value,
+      text_color: document.getElementById('cp-text').value, card_bg: document.getElementById('cp-card').value,
+      font_family: document.getElementById('cp-font').value, card_layout: currentLayout,
     };
     try {
-      const res = await fetch('/api/update-theme/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCsrf(),
-        },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (json.success) {
-        showToast('✓ Tema berhasil disimpan!', 'success');
-      } else {
-        showToast('✕ ' + json.error, 'error');
+      const res = await fetch('/api/update-theme/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() }, body: JSON.stringify(data) });
+      if (res.ok) {
+        const t = document.getElementById('toast'); t.textContent = 'Tema Berhasil Disimpan!'; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
       }
-    } catch(e) {
-      showToast('✕ Gagal menyimpan tema.', 'error');
-    }
+    } catch(e) {}
   }
 
-  function resetTheme() {
-    applyPreset('#6366f1','#8b5cf6','#06b6d4','#0f0f1a','#e2e8f0','#1e1e35');
-    document.getElementById('cp-font').value = 'Space_Grotesk';
-    previewFont();
-    currentLayout = 'grid';
-    updateCardLayout('grid');
-    document.querySelectorAll('.layout-btn').forEach((b,i) => { if(i===0) b.classList.add('active'); else b.classList.remove('active'); });
-  }
-
-  function getCsrf() {
-    return document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1] || '';
-  }
-
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = type;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
-  // Apply layout on load
-  document.addEventListener('DOMContentLoaded', () => updateCardLayout('{{ global_theme.card_layout|default:"grid" }}'));
+  function getCsrf() { return document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1] || ''; }
 </script>
 
 {% block extra_script %}{% endblock %}
