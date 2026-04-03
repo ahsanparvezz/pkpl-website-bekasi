@@ -127,18 +127,6 @@ ALLOWED_MEMBER_EMAILS = [
     if e.strip()
 ]
 
-SECRET_KEY='=`%I[oG@d#SP[][wa_4xu|dast$r*B#Dy%3ZGZcG_.pO=}k"i)'
-DEBUG=True
-
-# Google OAuth2 Credentials
-# Dapatkan dari https://console.cloud.google.com/
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='126173533276-uik85ec8korovq03ksgp4joccgimlfmv.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
-
-# Email anggota kelompok yang diizinkan mengubah tampilan
-ALLOWED_MEMBER_EMAILS='ahsan.p1012@gmail.com', 'emirbasukii@gmail.com' ,'kunkingfish@gmail.com', 'marlondbatara9899@gmail.com', 'muhammadrazka8@gmail.com', 'geralduswahyudi@gmail.com'
-
-# Tambahkan ini di bagian paling bawah settings.py
 
 # Konfigurasi OAuth Google
 SOCIALACCOUNT_PROVIDERS = {
@@ -160,7 +148,4 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Penting: Pastikan baris ini juga ada di settings.py
 SITE_ID = 1
-
-# List email anggota kelompok (Authorization)
-GROUP_MEMBER_EMAILS = ALLOWED_MEMBER_EMAILS
 
